@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F3FF">
+<title>Eat & Split</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- floating background stickers get added here by JavaScript -->
+<div class="stickers" id="stickers" aria-hidden="true"></div>
+
+<div class="wrap">
+
+  <header>
+    <h1 class="title"><span class="w1">Eat</span><span class="w2">&amp;</span><span class="w3">Split</span></h1>
+    <p>Dinner was bussin. The maths doesn't have to be a whole thing, bestie.</p>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="How to split">
+    <button class="tab" role="tab" id="tab-order" aria-selected="true">Pay for your own plate</button>
+    <button class="tab" role="tab" id="tab-equal" aria-selected="false">Split it even, no drama</button>
+  </div>
+
+  <main class="layout">
+
+    <!-- ================= LEFT: INPUTS ================= -->
+    <section class="card" aria-label="Bill details">
+
+      <!-- Mode 1: split equally -->
+      <div id="form-equal" hidden style="display:grid; gap:16px">
+        <h2>The damage</h2>
+        <div class="fields">
+          <label class="full">Total damage (bill amount)
+            <span class="with-prefix"><b>₹</b><input id="eq-bill" type="number" min="0" step="any" inputmode="decimal" value="1200"></span>
+          </label>
+          <label>Tax (ugh)
+            <span class="with-prefix"><b>₹</b><input id="eq-tax" type="number" min="0" step="any" inputmode="decimal" value="0"></span>
+          </label>
+          <label>How many in the squad?
+            <input id="eq-people" type="number" min="1" step="1" inputmode="numeric" value="4">
+          </label>
+          <label class="full">Tip (be a W, tip)
+            <span class="with-suffix with-prefix"><input id="eq-tip" type="number" min="0" step="any" inputmode="decimal" value="10" style="padding-left:12px"><b>%</b></span>
+          </label>
+        </div>
+        <div class="chips" data-tip="eq-tip">
+          <button class="chip" type="button" data-v="0">0%</button>
+          <button class="chip" type="button" data-v="5">5%</button>
+          <button class="chip" type="button" data-v="10">10%</button>
+          <button class="chip" type="button" data-v="15">15%</button>
+        </div>
+        <p class="hint">Keep tax at 0 if it is already baked into the bill. No cap.</p>
+      </div>
+
+      <!-- Mode 2: split by order -->
+      <div id="form-order" style="display:grid; gap:16px">
+        <h2>Who ate what? (no cap)</h2>
+        <p class="example">Example numbers are loaded in. Swap them for your real bill, bestie!</p>
+        <div class="rows" id="rows"></div>
+        <button class="add" id="add-row" type="button">+ add another bestie</button>
+
+        <label>Group stuff (fries, drinks, anything the whole table ate)
+          <span class="with-prefix"><b>₹</b><input id="o-shared" type="number" min="0" step="any" inputmode="decimal" value="0"></span>
+        </label>
+
+        <h2>Tax &amp; discounts (the boring bit)</h2>
+        <div class="choice">
+          <label><input type="radio" name="taxmode" value="known"> Bill shows the tax</label>
+          <label><input type="radio" name="taxmode" value="auto" checked> Only final total (sus)</label>
+        </div>
+
+        <div class="fields" id="tax-known" hidden>
+          <label>Total tax
+            <span class="with-prefix"><b>₹</b><input id="o-tax" type="number" min="0" step="any" inputmode="decimal" value="50"></span>
+          </label>
+          <label>Total discount (W)
+            <span class="with-prefix"><b>₹</b><input id="o-discount" type="number" min="0" step="any" inputmode="decimal" value="0"></span>
+          </label>
+        </div>
+
+        <div id="tax-auto" style="display:grid; gap:6px">
+          <label>Final total on the bill (tax already in there)
+            <span class="with-prefix"><b>₹</b><input id="o-total" type="number" min="0" step="any" inputmode="decimal" value="1050"></span>
+          </label>
+          <p class="hint">We sniff out the tax for you: final total minus everyone's plates. Lowkey genius.</p>
+        </div>
+
+        <h2>Tip time</h2>
+        <label>Tip on the food (before tax)
+          <span class="with-suffix with-prefix"><input id="o-tip" type="number" min="0" step="any" inputmode="decimal" value="0" style="padding-left:12px"><b>%</b></span>
+        </label>
+        <div class="chips" data-tip="o-tip">
+          <button class="chip" type="button" data-v="0">0%</button>
+          <button class="chip" type="button" data-v="5">5%</button>
+          <button class="chip" type="button" data-v="10">10%</button>
+          <button class="chip" type="button" data-v="15">15%</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= RIGHT: RESULT ================= -->
+    <section class="card results" id="results" aria-label="Who owes what" aria-live="polite">
+      <div id="result" style="display:grid; gap:16px"></div>
+    </section>
+
+  </main>
+
+  <!-- phone only: floating button that jumps to the result -->
+  <button class="jump" id="jump" type="button">see the damage ↓</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
